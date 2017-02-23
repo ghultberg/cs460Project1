@@ -17,14 +17,14 @@ clean :
 	rm *.o P1.out *.gch
 
 submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
-	rm -rf yourlastnameP1
-	mkdir yourlastnameP1
-	cp Project1.cpp yourlastnameP1
-	cp LexicalAnalyzer.h yourlastnameP1
-	cp LexicalAnalyzer.cpp yourlastnameP1
-	cp SyntacticalAnalyzer.h yourlastnameP1
-	cp SyntacticalAnalyzer.cpp yourlastnameP1
-	cp makefile yourlastnameP1
-	cp README.txt yourlastnameP1
-	tar cfvz yourlastnameP1.tgz yourlastnameP1
-	cp yourlastnameP1.tgz ~tiawatts/cs460drop
+	rm -rf TeamYP1
+	mkdir TeamYP1
+	cp Project1.cpp TeamYP1
+	cp LexicalAnalyzer.h TeamYP1
+	cp LexicalAnalyzer.cpp TeamYP1
+	cp SyntacticalAnalyzer.h TeamYP1
+	cp SyntacticalAnalyzer.cpp TeamYP1
+	cp makefile TeamYP1
+	cp README.txt TeamYP1
+	tar cfvz yourlastnameP1.tgz TeamYP1
+	cp TeamYP1.tgz ~tiawatts/cs460drop
