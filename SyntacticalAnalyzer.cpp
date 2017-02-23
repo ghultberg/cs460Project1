@@ -15,7 +15,7 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 		// write its name to the debug file
 	  ofstream debug(
 			 "TeamY.dbg", std::ios_base::out | std::ios_base::app );
-	                   debug << token;
+	                   debug << t;
 		// write the corresponding lexeme to the debug file
 			   debug << lex <<endl;
 	}
