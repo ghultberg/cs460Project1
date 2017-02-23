@@ -9,9 +9,16 @@ static string token_names[] = {	"EOF_T" };
 
 LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
-  linenum = 1;
-  pos = 0;
-  errors = 0;
+	linenum = 1;
+	pos = 0;
+	errors = 0;
+
+	ifstream input(filename);
+
+	if (input.fail()) {
+		std::cerr << "Failed to open file '" << filename << "'" << std::endl;
+		exit(1);
+	}  
 }
 
 LexicalAnalyzer::~LexicalAnalyzer ()
