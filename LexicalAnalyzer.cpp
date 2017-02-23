@@ -1,5 +1,6 @@
 #include <iomanip>
 #include <cstdlib>
+#include <ctype.h>
 #include "LexicalAnalyzer.h"
 
 using namespace std;
@@ -8,16 +9,9 @@ static string token_names[] = {	"EOF_T" };
 
 LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
-	// This function will initialize the lexical analyzer class
-  ifstream input = "";
-  ofstream listing = "";
-  ofstream debug = "";
-  token_type token = 0;
-  string line;
-  int linenum = 0;
-  int pos = 0;
-  string lexeme;
-  int errors = 0;
+  linenum = 1;
+  pos = 0;
+  errors = 0;
 }
 
 LexicalAnalyzer::~LexicalAnalyzer ()
@@ -30,37 +24,65 @@ token_type LexicalAnalyzer::GetToken ()
 	// This function will find the next lexeme int the input file and return
 	// the token_type value associated with that lexeme
 
-  while (std::getline(input, input))
-    {
-      static const char space[] = " \t";
-    }
-  if (input.length() == 0)
-    {
-      continue;
-    }
-  pos =  input.//find_first_not_of(white_space, 0);
+	// Reset 'lexeme' in preparation for finding the next token
+	lexeme = "";
 
-  if ((position == std::string::npos)
-      {
-	continue; // Blank line.
-      }
-    if (std::isalpha(input_text[position]))
-      {
-	// First character is a letter.
-	// Find the end of the identifier.
-	/*
-	std::string::size_type identifier_end_posn = 0;
-	identifier_end_posn = input.find_first_not_of(identifier_letters, position);
-	if (identifier_end_posn != std::string::npos)
-	  {
-	    const int identifier_length = identifier_end_posn - position + 1;
-	    std::string identifier = input_text.substr(position, identifier_length);
-	    cout << identifier << "\n";
-	    continue;
-	  }
-      }
-	*/
-	return token;
+	// If for some reason we can't find a token, default to ERR_T
+	token = ERR_T;
+
+	// TODO: wrap with a while loop w/ getline()
+	std::string line = "car cdr";
+
+	char c;
+	int table_map;
+
+	while (true)
+	{
+
+		// Break when reaching the end of the line
+		if (pos >= line.length()) {
+			pos = 0;
+			break;
+		}
+
+		// The current character being read
+		c = line[pos];
+
+		// Run the character through the DFA
+
+		/*
+			token_type result = runDFA(table_map);
+			if (result == -1) {
+				
+				// If not in a final state already, return an error
+				if (token < 100 || token > 199) {
+					token = result;
+					break;
+
+				// Otherwise, return the current token type and back up one character
+				} else {
+					pos--;
+					break;
+				}
+			}
+
+		*/
+
+		// Break from the loop when encountering whitespace of any kind
+		if (isspace(c)) {
+			pos++;
+			break;
+		}
+
+		// Append the current character to the lexeme
+		lexeme += c;
+
+		// Increment the position before beginning the next loop
+		pos++;
+	}
+
+	// For now since we don't have multiple lines to test with
+	return EOF_T;
 }
 
 string LexicalAnalyzer::GetTokenName (token_type t) const
