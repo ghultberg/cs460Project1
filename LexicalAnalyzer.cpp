@@ -12,6 +12,7 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 	linenum = 1;
 	pos = 0;
 	errors = 0;
+  // This function will initialize the lexical analyzer class
 
 	std::ifstream input(filename);
 
@@ -112,4 +113,21 @@ string LexicalAnalyzer::GetLexeme () const
 void LexicalAnalyzer::ReportError (const string & msg)
 {
 	// This function will be called to write an error message to a file
+}
+
+int LexicalAnalyzer::ConvertCharToTableCol(char c)
+{
+  int cintval;
+  if(isdigit(c))
+    cintval=50; //all digits are represented on the table as the same value of 50, since all digits behave the same way lexically
+  else
+    cintval = (int)c;
+  for(int i=0;i<41;i++) //61 is the last row of the table, it stores ascii equivalents of the values
+    {
+      if(cintval==lexicalTable[61][i])
+	return i;
+    }
+  string err = "Error: unexpected character "+c;
+  ReportError(err);
+  return cintval;
 }
