@@ -13,17 +13,19 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 	pos = 0;
 	errors = 0;
 
-	ifstream input(filename);
+	std::ifstream input(filename);
 
 	if (input.fail()) {
 		std::cerr << "Failed to open file '" << filename << "'" << std::endl;
 		exit(1);
-	}  
+	}
 }
 
 LexicalAnalyzer::~LexicalAnalyzer ()
 {
 	// This function will complete the execution of the lexical analyzer class
+
+	input.close();
 }
 
 token_type LexicalAnalyzer::GetToken ()
@@ -37,11 +39,12 @@ token_type LexicalAnalyzer::GetToken ()
 	// If for some reason we can't find a token, default to ERR_T
 	token = ERR_T;
 
-	// TODO: wrap with a while loop w/ getline()
-	std::string line = "car cdr";
-
 	char c;
-	int table_map;
+
+	for (std::string line; std::getline(input, line);)
+  {
+      std::cout << "hello" << std::endl;
+  }
 
 	while (true)
 	{
@@ -58,7 +61,7 @@ token_type LexicalAnalyzer::GetToken ()
 		// Run the character through the DFA
 
 		/*
-			token_type result = runDFA(table_map);
+			token_type result = runDFA(c);
 			if (result == -1) {
 				
 				// If not in a final state already, return an error
