@@ -1,134 +1,142 @@
-#include <iomanip>
+#include "LexicalAnalyzer.h"
 #include <cstdlib>
 #include <ctype.h>
-#include "LexicalAnalyzer.h"
+#include <iomanip>
 
 using namespace std;
 
-static string token_names[] = {	"EOF_T" }; 
-
-LexicalAnalyzer::LexicalAnalyzer (char * filename)
+LexicalAnalyzer::LexicalAnalyzer(char* filename)
 {
-	linenum = 1;
-	pos = 0;
-	errors = 0;
-  // This function will initialize the lexical analyzer class
+    linenum = 1;
+    pos = 0;
+    errors = 0;
+    // This function will initialize the lexical analyzer class
 
-	std::ifstream input(filename);
+    input.open(filename);
 
-	if (input.fail()) {
-		std::cerr << "Failed to open file '" << filename << "'" << std::endl;
-		exit(1);
-	}
+    if (input.fail()) {
+        std::cerr << "Failed to open file '" << filename << "'" << std::endl;
+        exit(1);
+    }
 }
 
-LexicalAnalyzer::~LexicalAnalyzer ()
+LexicalAnalyzer::~LexicalAnalyzer()
 {
-	// This function will complete the execution of the lexical analyzer class
+    // This function will complete the execution of the lexical analyzer class
 
-	input.close();
+    input.close();
 }
 
-token_type LexicalAnalyzer::GetToken ()
+token_type LexicalAnalyzer::GetToken()
 {
-	// This function will find the next lexeme int the input file and return
-	// the token_type value associated with that lexeme
+    // This function will find the next lexeme int the input file and return
+    // the token_type value associated with that lexeme
 
-	// Reset 'lexeme' in preparation for finding the next token
-	lexeme = "";
+    std::cout << std::endl
+              << "Getting a new token" << std::endl;
 
-	// If for some reason we can't find a token, default to ERR_T
-	token = ERR_T;
+    // Reset 'lexeme' in preparation for finding the next token
+    lexeme = "";
 
-	char c;
+    token = START_T;
 
-	for (std::string line; std::getline(input, line);)
-  {
-      std::cout << "hello" << std::endl;
-  }
+    std::getline(input, line);
 
-	while (true)
-	{
+    char c;
 
-		// Break when reaching the end of the line
-		if (pos >= line.length()) {
-			pos = 0;
-			break;
-		}
+    while (true) {
+        // Break when reaching the end of the line
+        if (pos >= line.length()) {
+            if (std::getline(input, line))
+                pos = 0;
+            else {
+                token = EOF_T;
+            	break;
+            }
+        }
 
-		// The current character being read
-		c = line[pos];
+        // The current character being read
+        c = line[pos];
 
-		// Run the character through the DFA
+        std::cout << "Read character: " << c << std::endl;
 
-		/*
-			token_type result = runDFA(c);
-			if (result == -1) {
-				
-				// If not in a final state already, return an error
-				if (token < 100 || token > 199) {
-					token = result;
-					break;
+        token_type prevState = token;
 
-				// Otherwise, return the current token type and back up one character
-				} else {
-					pos--;
-					break;
-				}
-			}
+        // Run the character through the DFA
+        token = LexicalAnalyzer::nextState(c, prevState);
 
-		*/
+        std::cout << "DFA returned: " << token << std::endl;
 
-		// Break from the loop when encountering whitespace of any kind
-		if (isspace(c)) {
-			pos++;
-			break;
-		}
+        // If in a final state when the next token is ERR_T, return the previous token
+        if (token == ERR_T && (token >= 100 || token <= 199)) {
+            pos--;
+            token = prevState;
+            break;
+        }
 
-		// Append the current character to the lexeme
-		lexeme += c;
+        // Break from the loop when encountering whitespace of any kind
+        if (isspace(c)) {
+            pos++;
+            break;
+        }
 
-		// Increment the position before beginning the next loop
-		pos++;
-	}
+        // Append the current character to the lexeme
+        lexeme += c;
 
-	// For now since we don't have multiple lines to test with
-	return EOF_T;
+        // Increment the position before beginning the next loop
+        pos++;
+    }
+
+    std::cout << "Lexeme is: " << lexeme << std::endl;
+    std::cout << "Token is: " << token << std::endl;
+
+    return token;
 }
 
-string LexicalAnalyzer::GetTokenName (token_type t) const
+string LexicalAnalyzer::GetTokenName(token_type t) const
 {
-	// The GetTokenName function returns a string containing the name of the
-	// token passed to it. 
-	return "";
+    // The GetTokenName function returns a string containing the name of the
+    // token passed to it.
+    return "";
 }
 
-string LexicalAnalyzer::GetLexeme () const
+string LexicalAnalyzer::GetLexeme() const
 {
-	// This function will return the lexeme found by the most recent call to 
-	// the get_token function
-	return "";
+    // This function will return the lexeme found by the most recent call to
+    // the get_token function
+    return lexeme;
 }
 
-void LexicalAnalyzer::ReportError (const string & msg)
+void LexicalAnalyzer::ReportError(const string& msg)
 {
-	// This function will be called to write an error message to a file
+    // This function will be called to write an error message to a file
 }
 
 int LexicalAnalyzer::ConvertCharToTableCol(char c)
 {
-  int cintval;
-  if(isdigit(c))
-    cintval=50; //all digits are represented on the table as the same value of 50, since all digits behave the same way lexically
-  else
-    cintval = (int)c;
-  for(int i=0;i<41;i++) //61 is the last row of the table, it stores ascii equivalents of the values
+    int cintval;
+
+    if (c >= 97 || c <= 122)
+        cintval = c - 32;
+    else if (isdigit(c))
+        cintval = 50; // all digits are represented on the table as the same value
+    // of 50, since all digits behave the same way lexically
+    else
+        cintval = (int)c;
+    for (int i = 0; i < 41; i++) // 61 is the last row of the table, it stores
+    // ascii equivalents of the values
     {
-      if(cintval==lexicalTable[61][i])
-	return i;
+        if (cintval == lexicalTable[61][i])
+            return i;
     }
-  string err = "Error: unexpected character ";
-  err.push_back(c);
-  ReportError(err);
-  return cintval;
+    string err = "Error: unexpected character ";
+    err.push_back(c);
+    ReportError(err);
+    return cintval;
+}
+
+token_type LexicalAnalyzer::nextState(char c, token_type currState)
+{
+    // return static_cast<token_type>(lexicalTable[?][?]);
+    return static_cast<token_type>(101); // for testing
 }

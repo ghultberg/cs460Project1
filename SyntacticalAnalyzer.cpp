@@ -9,19 +9,22 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
 	lex = new LexicalAnalyzer (filename);
 	token_type t;
+
+	debug.open("TeamY.dbg", std::ios_base::out);
+
 	while ((t = lex->GetToken()) != EOF_T)
 	{
 		// get a token
 		// write its name to the debug file
-	  ofstream debug(
-			 "TeamY.dbg", std::ios_base::out | std::ios_base::app );
-	                   debug << t;
+    debug << t;
+
 		// write the corresponding lexeme to the debug file
-			   debug << lex <<endl;
+		debug << lex->GetLexeme() << std::endl;
 	}
 }
 
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
 {
+	debug.close();
 	delete lex;
 }
