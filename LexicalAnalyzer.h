@@ -60,6 +60,7 @@ class LexicalAnalyzer
 	int pos;
 	string lexeme;
 	int errors;
+	bool eofFlag;
 
 	int ConvertCharToTableCol(char);
 

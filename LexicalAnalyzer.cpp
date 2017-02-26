@@ -10,6 +10,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
     linenum = 1;
     pos = 0;
     errors = 0;
+    eofFlag = false;
     // This function will initialize the lexical analyzer class
 
     input.open(filename);
@@ -32,6 +33,8 @@ token_type LexicalAnalyzer::GetToken()
     // This function will find the next lexeme int the input file and return
     // the token_type value associated with that lexeme
 
+    if (eofFlag) return EOF_T;
+
     std::cout << std::endl
               << "Getting a new token" << std::endl;
 
@@ -44,19 +47,25 @@ token_type LexicalAnalyzer::GetToken()
 
     char c;
 
-    while (true) {
+    // If reading a lexeme and encountering EOF, return whatever the most recent state is
+    while (!eofFlag) {
         // Break when reaching the end of the line
         if (pos >= line.length()) {
-            if (std::getline(input, line))
-                pos = 0;
-            else {
-                token = EOF_T;
-            	break;
-            }
+            if (std::getline(input, line)) pos = 0;
+            else eofFlag = true;
         }
 
         // The current character being read
         c = line[pos];
+
+        // Break from the loop when encountering whitespace of any kind or EOF flag is set
+        if (isspace(c)) {
+            pos++;
+            break;
+        }
+
+        // Append the current character to the lexeme
+        lexeme += c;
 
         std::cout << "Read character: " << c << std::endl;
 
@@ -73,15 +82,6 @@ token_type LexicalAnalyzer::GetToken()
             token = prevState;
             break;
         }
-
-        // Break from the loop when encountering whitespace of any kind
-        if (isspace(c)) {
-            pos++;
-            break;
-        }
-
-        // Append the current character to the lexeme
-        lexeme += c;
 
         // Increment the position before beginning the next loop
         pos++;
@@ -104,7 +104,7 @@ string LexicalAnalyzer::GetLexeme() const
 {
     // This function will return the lexeme found by the most recent call to
     // the get_token function
-    return lexeme;
+    return lexeme.c_str();
 }
 
 void LexicalAnalyzer::ReportError(const string& msg)
