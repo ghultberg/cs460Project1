@@ -127,7 +127,8 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
       if(cintval==lexicalTable[61][i])
 	return i;
     }
-  string err = "Error: unexpected character "+c;
+  string err = "Error: unexpected character ";
+  err.push_back(c);
   ReportError(err);
   return cintval;
 }
