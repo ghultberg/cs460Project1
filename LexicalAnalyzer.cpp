@@ -110,6 +110,7 @@ string LexicalAnalyzer::GetLexeme() const
 void LexicalAnalyzer::ReportError(const string& msg)
 {
     // This function will be called to write an error message to a file
+    std::cout << msg << std::endl;
 }
 
 int LexicalAnalyzer::ConvertCharToTableCol(char c)
@@ -123,8 +124,7 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
     // of 50, since all digits behave the same way lexically
     else
         cintval = (int)c;
-    for (int i = 0; i < 41; i++) // 61 is the last row of the table, it stores
-    // ascii equivalents of the values
+    for (int i = 0; i < 41; i++) // 61 is the last row of the table, it stores ascii equivalents of the values
     {
         if (cintval == lexicalTable[61][i])
             return i;
@@ -137,6 +137,6 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
 
 token_type LexicalAnalyzer::nextState(char c, token_type currState)
 {
-    // return static_cast<token_type>(lexicalTable[?][?]);
-    return static_cast<token_type>(101); // for testing
+	int col = ConvertCharToTableCol(c);
+    return static_cast<token_type>(lexicalTable[currState][col]);
 }
