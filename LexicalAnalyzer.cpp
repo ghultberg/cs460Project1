@@ -23,7 +23,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
 
     listing.open("TeamY.lst", std::ios_base::out);
     debug.open("TeamY.dbg", std::ios_base::out);
-    p1.open("P1-1.p1", std::ios_base::out);
+    p1.open("TeamY.p1", std::ios_base::out);
 
     std::getline(input, line);
     line += ' ';
