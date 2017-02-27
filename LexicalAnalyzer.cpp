@@ -32,6 +32,41 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
     debug<<"Input file: "<<filename<<endl;
     listing <<linenum<<": "<<line<<endl;
     debug<<linenum<<": "<<line<<endl;
+
+    tokenMap = {
+        {ERR_T,"ERR_T"},
+        {START_T,"START_T"},
+        {QUOTE_T,"QUOTE_T"},
+        {LPAREN_T,"LPAREN_T"},
+        {RPAREN_T,"RPAREN_T"},
+        {MULT_T,"MULT_T"},
+        {PLUS_T,"PLUS_T"},
+        {MINUS_T,"MINUS_T"},
+        {DIV_T,"DIV_T"},
+        {LT_T,"LT_T"},
+        {LTE_T,"LTE_T"},
+        {GT_T,"GT_T"},
+        {GTE_T,"GTE_T"},
+        {NUMLIT_T,"NUMLIT_T"},
+        {LISTOP_T,"LISTOP_T"},
+        {IDENT_T,"IDENT_T"},
+        {CONS_T,"CONS_T"},
+        {IF_T,"IF_T"},
+        {WHILE_T,"WHILE_T"},
+        {AND_T,"AND_T"},
+        {OR_T,"OR_T"},
+        {NOT_T,"NOT_T"},
+        {DEFINE_T,"DEFINE_T"},
+        {NUMBERP_T,"NUMBERP_T"},
+        {SYMBOLP_T,"SYMBOLP_T"},
+        {LISTP_T,"LISTP_T"},
+        {ZEROP_T,"ZEROP_T"},
+        {NULLP_T,"NULLP_T"},
+        {CHARP_T,"CHARP_T"},
+        {STRINGP_T,"STRINGP_T"},
+        {EOF_T,"EOF_T"},
+        {EQUALTO_T,"EQUALTO_T"}, 
+  };
     
 }
 
@@ -153,10 +188,8 @@ token_type LexicalAnalyzer::GetToken()
         }
     }
 
-    std::cout << "Lexeme is: " << lexeme << std::endl;
-    std::cout << "Token is: " << token << std::endl;
-    debug<<"\t"<<lexeme<<"\t"<<token<<endl;
-    p1 << token << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
+    debug<<"\t"<<lexeme<<"\t"<<LexicalAnalyzer::GetTokenName(token)<<endl;
+    p1 << LexicalAnalyzer::GetTokenName(token) << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
 
     return token;
 }
@@ -165,7 +198,7 @@ string LexicalAnalyzer::GetTokenName(token_type t) const
 {
     // The GetTokenName function returns a string containing the name of the
     // token passed to it.
-    return "";
+    return tokenMap.at(t);
 }
 
 string LexicalAnalyzer::GetLexeme() const
