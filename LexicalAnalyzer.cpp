@@ -70,7 +70,7 @@ token_type LexicalAnalyzer::GetToken()
 
         // Break from the loop when encountering whitespace of any kind or EOF flag is set
         if (isspace(c) || c == 0) {
-        	token = LexicalAnalyzer::nextState(c, prevState);
+        	if (prevState != START_T) token = LexicalAnalyzer::nextState(c, prevState);
             break;
         }
 
