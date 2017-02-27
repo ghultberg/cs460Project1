@@ -60,6 +60,7 @@ class LexicalAnalyzer
 	int pos;
 	string lexeme;
 	int errors;
+	string allErrors;
 	bool eofFlag;
 
 	bool isFinal(token_type);
