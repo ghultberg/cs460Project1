@@ -134,7 +134,13 @@ class LexicalAnalyzer
 {	IF_T	,	IF_T	,	IF_T	,	IF_T	,	IF_T	,	IF_T	,	IF_T	,	IF_T	,	IF_T	,	10	,	IF_T	,	IF_T	,	IF_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
 {	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	NOT_T	,	10	,	NOT_T	,	NOT_T	,	NOT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
 {	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	10	,	WHILE_T	,	WHILE_T	,	WHILE_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
-{	32	,	39	,	40	,	41	,	42	,	43	,	45	,	46	,	47	,	50	,	60	,	61	,	62	,	97	,	98	,	99	,	100	,	101	,	102	,	103	,	104	,	105	,	106	,	107	,	108	,	109	,	110	,	111	,	112	,	113	,	114	,	115	,	116	,	117	,	118	,	119	,	120	,	121	,	122	,	63	,	95	}};
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	63	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	64	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	65	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	66	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	SYMBOLP_T	,	10	},
+{	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
+				    {	32	,	39	,	40	,	41	,	42	,	43	,	45	,	46	,	47	,	50	,	60	,	61	,	62	,	97	,	98	,	99	,	100	,	101	,	102	,	103	,	104	,	105	,	106	,	107	,	108	,	109	,	110	,	111	,	112	,	113	,	114	,	115	,	116	,	117	,	118	,	119	,	120	,	121	,	122	,	63	,	95	}};
 
 };
 #endif
