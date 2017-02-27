@@ -242,9 +242,8 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
         if (cintval == lexicalTable[68][i])
             return i;
     }
-    //string err = "Invald character found: "; err+=c;
-    //ReportError(err);
-    return cintval;
+
+    return ERR_T;
 }
 
 token_type LexicalAnalyzer::nextState(char c, token_type currState)
