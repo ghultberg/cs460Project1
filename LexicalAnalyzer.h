@@ -72,7 +72,7 @@ class LexicalAnalyzer
 
 	token_type nextState(char, token_type);
 
-	int lexicalTable[63][41] = {{		,	QUOTE_T	,	LPAREN_T	,	RPAREN_T	,	MULT_T	,	1	,	9	,	2	,	DIV_T	,	3	,	7	,	EQUALTO_T	,	8	,	11	,	10	,	47	,	13	,	10	,	10	,	10	,	10	,	18	,	10	,	10	,	19	,	10	,	23	,	32	,	10	,	10	,	10	,	33	,	10	,	10	,	10	,	39	,	10	,	10	,	43	,	ERR_T	,	10	},
+	int lexicalTable[63][41] = {{	ERR_T	,	QUOTE_T	,	LPAREN_T	,	RPAREN_T	,	MULT_T	,	1	,	9	,	2	,	DIV_T	,	3	,	7	,	EQUALTO_T	,	8	,	11	,	10	,	47	,	13	,	10	,	10	,	10	,	10	,	18	,	10	,	10	,	19	,	10	,	23	,	32	,	10	,	10	,	10	,	33	,	10	,	10	,	10	,	39	,	10	,	10	,	43	,	ERR_T	,	10	},
 {	PLUS_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	2	,	ERR_T	,	3	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
 {	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	5	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
 {	NUMLIT_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	4	,	ERR_T	,	5	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
