@@ -7,12 +7,13 @@ using namespace std;
 
 LexicalAnalyzer::LexicalAnalyzer(char* filename)
 {
+
+  // This function will initialize the lexical analyzer class
     linenum = 1;
     pos = 0;
     errors = 0;
     allErrors = "";
     eofFlag = false;
-    // This function will initialize the lexical analyzer class
 
     input.open(filename);
 
@@ -68,15 +69,32 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
         {EQUALTO_T,"EQUALTO_T"}, 
   };
     
+
+  input.open(filename);
+  
+  if (input.fail()) {
+    std::cerr << "Failed to open file '" << filename << "'" << std::endl;
+    exit(1);
+  }
+  
+  listing.open("TeamY.lst", std::ios_base::out);
+  debug.open("TeamY.dbg", std::ios_base::out);
+  
+  std::getline(input, line);
+  line += ' ';
+  
+  listing<<"Input file: "<<filename<<endl;
+  debug<<"Input file: "<<filename<<endl;
+  listing <<linenum<<": "<<line<<endl;
+  debug<<linenum<<": "<<line<<endl;
+  
 }
 
 LexicalAnalyzer::~LexicalAnalyzer()
 {
-  
+  // This function will complete the execution of the lexical analyzer class 
   listing<<allErrors<<errors<<" errors found in input file"<<endl;
   debug<<errors<<" errors found in input file"<<endl;
-  
-  // This function will complete the execution of the lexical analyzer class
   listing.close();
   debug.close();
   input.close();
@@ -99,7 +117,6 @@ token_type LexicalAnalyzer::GetToken()
 
     // If reading a lexeme and encountering EOF, return whatever the most recent state is
     while (!eofFlag) {
-
         // Return the current state when reaching the end of the line,
         // and prepare the next line when GetToken() is called.
         if (pos >= line.length()) {
@@ -188,30 +205,34 @@ token_type LexicalAnalyzer::GetToken()
         }
     }
 
+
     if (token == ERR_T) {
         //Write an error report with ReportError
         std::string err = "Invalid character found: "; err+=c;
         ReportError(err);
     }
-      
+
     debug<<"\t"<<lexeme<<"\t"<<LexicalAnalyzer::GetTokenName(token)<<endl;
     p1 << LexicalAnalyzer::GetTokenName(token) << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
+
 
     return token;
 }
 
 string LexicalAnalyzer::GetTokenName(token_type t) const
 {
+
     // The GetTokenName function returns a string containing the name of the
     // token passed to it.
     return tokenMap.at(t);
+
 }
 
 string LexicalAnalyzer::GetLexeme() const
 {
-    // This function will return the lexeme found by the most recent call to
-    // the get_token function
-    return lexeme.c_str();
+  // This function will return the lexeme found by the most recent call to
+  // the get_token function
+  return lexeme.c_str();
 }
 
 void LexicalAnalyzer::ReportError(const string& msg)
@@ -227,6 +248,7 @@ void LexicalAnalyzer::ReportError(const string& msg)
 
 int LexicalAnalyzer::ConvertCharToTableCol(char c)
 {
+
     int cintval;
 
     if (c >= 65 && c <= 90)
@@ -238,17 +260,19 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
         cintval = (int)c;
 
     for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
+
     {
-        if (cintval == lexicalTable[62][i])
-            return i;
+      if (cintval == lexicalTable[62][i])
+	return i;
     }
-    //string err = "Invald character found: "; err+=c;
-    //ReportError(err);
-    return cintval;
+  //string err = "Invald character found: "; err+=c;
+  //ReportError(err);
+  return cintval;
 }
 
 token_type LexicalAnalyzer::nextState(char c, token_type currState)
 {
+
 	int col = ConvertCharToTableCol(c);
 
 	// If the state we've reached is outside of the bounds of our table,
@@ -261,5 +285,5 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 
 bool LexicalAnalyzer::isFinal(token_type s)
 {
-	return (s > 61);
+  return (s > 61);
 }
