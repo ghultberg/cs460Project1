@@ -1,3 +1,5 @@
 *.out
 *.o
 TeamY.dbg
+TeamY.lst
+test1.txt
