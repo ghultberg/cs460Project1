@@ -16,7 +16,7 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 	{
 		// get a token
 		// write its name to the debug file
-    debug << t;
+    debug << t << " : ";
 
 		// write the corresponding lexeme to the debug file
 		debug << lex->GetLexeme() << std::endl;

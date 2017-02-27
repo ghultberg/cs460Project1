@@ -61,17 +61,18 @@ token_type LexicalAnalyzer::GetToken()
         // Increment the position before beginning the next loop
         pos++;
 
-        // Break from the loop when encountering whitespace of any kind or EOF flag is set
-        if (isspace(c) || c == 0) {
-            break;
-        }
-
         // Append the current character to the lexeme
         lexeme += c;
 
         std::cout << "Read character: " << c << std::endl;
 
         token_type prevState = token;
+
+        // Break from the loop when encountering whitespace of any kind or EOF flag is set
+        if (isspace(c) || c == 0) {
+        	token = LexicalAnalyzer::nextState(c, prevState);
+            break;
+        }
 
         // Run the character through the DFA
         token = LexicalAnalyzer::nextState(c, prevState);
