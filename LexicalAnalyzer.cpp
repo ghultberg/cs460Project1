@@ -219,7 +219,7 @@ void LexicalAnalyzer::ReportError(const string& msg)
   // This function will be called to write an error message to a file
   string err = "Error at "; err+=to_string(linenum); err+=","; err+=to_string(pos);
   err += ": "+msg+"\n";
-  std::cout<< msg<<endl;
+  //std::cout<< msg<<endl;
   debug<<err;
   allErrors +=err;
   errors++;
