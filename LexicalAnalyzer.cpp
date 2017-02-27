@@ -254,12 +254,12 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 	// If the state we've reached is outside of the bounds of our table,
 	// return an ERR_T. This signals to GetToken() to check if the state
 	// it was previously in was final or not.
-	if (currState > 61) return ERR_T;
+	if (currState > 99) return ERR_T;
 
     return static_cast<token_type>(lexicalTable[currState][col]);
 }
 
 bool LexicalAnalyzer::isFinal(token_type s)
 {
-	return (s > 61);
+	return (s > 66);
 }
