@@ -10,11 +10,9 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 	lex = new LexicalAnalyzer (filename);
 	token_type t;
 
-	
-
 	while ((t = lex->GetToken()) != EOF_T)
 	{
-	  //removed all writes to debug, those are done in LexicalAnalyzer
+	  
 	}
 }
 

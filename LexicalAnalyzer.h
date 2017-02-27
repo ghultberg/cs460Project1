@@ -54,6 +54,7 @@ class LexicalAnalyzer
 	ifstream input;
 	ofstream listing;
 	ofstream debug;
+	ofstream p1;
 	token_type token;
 	string line;
 	int linenum;

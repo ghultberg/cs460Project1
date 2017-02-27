@@ -23,6 +23,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
 
     listing.open("TeamY.lst", std::ios_base::out);
     debug.open("TeamY.dbg", std::ios_base::out);
+    p1.open("P1-1.p1", std::ios_base::out);
 
     std::getline(input, line);
     line += ' ';
@@ -44,6 +45,7 @@ LexicalAnalyzer::~LexicalAnalyzer()
   listing.close();
   debug.close();
   input.close();
+  p1.close();
 }
 
 token_type LexicalAnalyzer::GetToken()
@@ -52,9 +54,6 @@ token_type LexicalAnalyzer::GetToken()
     // the token_type value associated with that lexeme
 
     if (eofFlag) return EOF_T;
-
-    // std::cout << std::endl
-    //           << "Getting a new token" << std::endl;
 
     // Reset 'lexeme' in preparation for finding the next token
     lexeme = "";
@@ -74,9 +73,9 @@ token_type LexicalAnalyzer::GetToken()
             if (std::getline(input, line)) {
             	line += ' ';
             	pos = 0;
-		linenum++;
-		debug <<linenum<<": "<<line<<endl;
-		listing<<linenum<<": "<<line<<endl;
+        		linenum++;
+        		debug <<linenum<<": "<<line<<endl;
+        		listing<<linenum<<": "<<line<<endl;
             }
 
             // Otherwise, we must have reached the end of the file
@@ -89,7 +88,7 @@ token_type LexicalAnalyzer::GetToken()
             } 
 
             // Exit the while loop and return whatever we have for token up to this point
-            break;
+            if (token != START_T) break;
         }
 
         // Shortcut to the current character to be evaluated
@@ -108,22 +107,19 @@ token_type LexicalAnalyzer::GetToken()
         // Append the current character to the lexeme
         lexeme += c;
 
-        // std::cout << "Read character: " << c << std::endl;
-
         // Cache the previous state in case we need to go back to it (i.e. GT_T vs GTE_T)
         token_type prevState = token;
 
         // Run the character through the DFA and get the state that we end up in
         token = LexicalAnalyzer::nextState(c, prevState);
 
-        // std::cout << "DFA returned: " << token << std::endl;
-
         // If we reach an ERR_T but the previous state was final, we can return the
         // previous state.
         if (token == ERR_T) {
-	  //Write an error report with ReportError
-	  string err = "Invald character found: "; err+=c;
-	  ReportError(err);
+
+            // std::cout << "previous token was: " << int(line[pos - 1]) << std::endl;
+            // std::cout << "current token is: " << int(c) << std::endl;
+
         	// If the state is final, return the previous state (otherwise, do nothing
         	// and return the ERR_T)
         	if (LexicalAnalyzer::isFinal(prevState)) {
@@ -160,6 +156,7 @@ token_type LexicalAnalyzer::GetToken()
     std::cout << "Lexeme is: " << lexeme << std::endl;
     std::cout << "Token is: " << token << std::endl;
     debug<<"\t"<<lexeme<<"\t"<<token<<endl;
+    p1 << token << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
 
     return token;
 }
@@ -201,8 +198,6 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
     else
         cintval = (int)c;
 
-    // std::cout << "Reading char " << cintval << std::endl;
-
     for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
     {
         if (cintval == lexicalTable[62][i])
@@ -221,8 +216,6 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 	// return an ERR_T. This signals to GetToken() to check if the state
 	// it was previously in was final or not.
 	if (currState > 61) return ERR_T;
-
-	// std::cout << "Reading table row " << currState << " col " << col << std::endl;
 
     return static_cast<token_type>(lexicalTable[currState][col]);
 }
