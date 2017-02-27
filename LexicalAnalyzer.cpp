@@ -122,7 +122,8 @@ token_type LexicalAnalyzer::GetToken()
         // previous state.
         if (token == ERR_T) {
 	  //Write an error report with ReportError
-	  
+	  string err = "Invald character found: "; err+=c;
+	  ReportError(err);
         	// If the state is final, return the previous state (otherwise, do nothing
         	// and return the ERR_T)
         	if (LexicalAnalyzer::isFinal(prevState)) {
@@ -182,7 +183,7 @@ void LexicalAnalyzer::ReportError(const string& msg)
   // This function will be called to write an error message to a file
   string err = "Error at "; err+=to_string(linenum); err+=","; err+=to_string(pos);
   err += ": "+msg+"\n";
-  std::cout<< msg;
+  std::cout<< msg<<endl;
   debug<<err;
   allErrors +=err;
   errors++;
@@ -207,8 +208,8 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
         if (cintval == lexicalTable[62][i])
             return i;
     }
-    string err = "Invald character found: "; err+=c;
-    ReportError(err);
+    //string err = "Invald character found: "; err+=c;
+    //ReportError(err);
     return cintval;
 }
 
