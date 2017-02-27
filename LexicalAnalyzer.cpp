@@ -10,6 +10,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
     linenum = 1;
     pos = 0;
     errors = 0;
+    allErrors = "";
     eofFlag = false;
     // This function will initialize the lexical analyzer class
 
@@ -20,15 +21,28 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
         exit(1);
     }
 
+    listing.open("TeamY.lst", std::ios_base::out);
+    debug.open("TeamY.dbg", std::ios_base::out);
+
     std::getline(input, line);
-    line += ' ';
+
+    listing<<"Input file: "<<filename<<endl;
+    debug<<"Input file: "<<filename<<endl;
+    listing <<linenum<<": "<<line<<endl;
+    debug<<linenum<<": "<<line<<endl;
+    
 }
 
 LexicalAnalyzer::~LexicalAnalyzer()
 {
-    // This function will complete the execution of the lexical analyzer class
-
-    input.close();
+  
+  listing<<allErrors<<errors<<" errors found in input file"<<endl;
+  debug<<errors<<" errors found in input file"<<endl;
+  
+  // This function will complete the execution of the lexical analyzer class
+  listing.close();
+  debug.close();
+  input.close();
 }
 
 token_type LexicalAnalyzer::GetToken()
@@ -148,8 +162,13 @@ string LexicalAnalyzer::GetLexeme() const
 
 void LexicalAnalyzer::ReportError(const string& msg)
 {
-    // This function will be called to write an error message to a file
-    std::cout << msg << std::endl;
+  // This function will be called to write an error message to a file
+  string err = "Error at "; err+=to_string(linenum); err+=","; err+=to_string(pos);
+  err += ": "+msg+"\n";
+  std::cout<< msg;
+  debug<<err;
+  allErrors +=err;
+  errors++;
 }
 
 int LexicalAnalyzer::ConvertCharToTableCol(char c)
@@ -171,8 +190,7 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
         if (cintval == lexicalTable[62][i])
             return i;
     }
-    string err = "Error: unexpected character ";
-    err.push_back(c);
+    string err = "Invald character found: "; err+=c;
     ReportError(err);
     return cintval;
 }
