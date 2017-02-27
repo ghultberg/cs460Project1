@@ -49,6 +49,7 @@ token_type LexicalAnalyzer::GetToken()
 
     // If reading a lexeme and encountering EOF, return whatever the most recent state is
     while (!eofFlag) {
+
         // Break when reaching the end of the line
         if (pos >= line.length()) {
             if (std::getline(input, line)) pos = 0;
@@ -57,6 +58,11 @@ token_type LexicalAnalyzer::GetToken()
 
         // The current character being read
         c = line[pos];
+
+        if (lexeme.length() == 0 && isspace(c)) {
+        	pos++;
+        	break;
+        }
 
         // Increment the position before beginning the next loop
         pos++;
@@ -67,12 +73,6 @@ token_type LexicalAnalyzer::GetToken()
         std::cout << "Read character: " << c << std::endl;
 
         token_type prevState = token;
-
-        // Break from the loop when encountering whitespace of any kind or EOF flag is set
-        if (isspace(c) || c == 0) {
-        	if (prevState != START_T) token = LexicalAnalyzer::nextState(c, prevState);
-            break;
-        }
 
         // Run the character through the DFA
         token = LexicalAnalyzer::nextState(c, prevState);
