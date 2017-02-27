@@ -72,7 +72,7 @@ class LexicalAnalyzer
 
 	token_type nextState(char, token_type);
 
-	int lexicalTable[63][41] = {{	ERR_T	,	QUOTE_T	,	LPAREN_T	,	RPAREN_T	,	MULT_T	,	1	,	9	,	2	,	DIV_T	,	3	,	7	,	EQUALTO_T	,	8	,	11	,	10	,	47	,	13	,	10	,	10	,	10	,	10	,	18	,	10	,	10	,	19	,	10	,	23	,	32	,	10	,	10	,	10	,	33	,	10	,	10	,	10	,	39	,	10	,	10	,	43	,	ERR_T	,	10	},
+	int lexicalTable[69][41] = {{	ERR_T	,	QUOTE_T	,	LPAREN_T	,	RPAREN_T	,	MULT_T	,	1	,	9	,	2	,	DIV_T	,	3	,	7	,	EQUALTO_T	,	8	,	11	,	10	,	47	,	13	,	10	,	10	,	10	,	10	,	18	,	10	,	10	,	19	,	10	,	23	,	32	,	10	,	10	,	10	,	33	,	10	,	10	,	10	,	39	,	10	,	10	,	43	,	ERR_T	,	10	},
 {	PLUS_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	2	,	ERR_T	,	3	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
 {	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	5	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
 {	NUMLIT_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	4	,	ERR_T	,	5	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
@@ -140,7 +140,7 @@ class LexicalAnalyzer
 {	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	66	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
 {	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	SYMBOLP_T	,	10	},
 {	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	IDENT_T	,	IDENT_T	,	IDENT_T	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	54	,	10	,	10	,	10	,	10	,	10	,	10	,	10	,	IDENT_T	,	10	},
-				    {	32	,	39	,	40	,	41	,	42	,	43	,	45	,	46	,	47	,	50	,	60	,	61	,	62	,	97	,	98	,	99	,	100	,	101	,	102	,	103	,	104	,	105	,	106	,	107	,	108	,	109	,	110	,	111	,	112	,	113	,	114	,	115	,	116	,	117	,	118	,	119	,	120	,	121	,	122	,	63	,	95	}};
+{	32	,	39	,	40	,	41	,	42	,	43	,	45	,	46	,	47	,	50	,	60	,	61	,	62	,	97	,	98	,	99	,	100	,	101	,	102	,	103	,	104	,	105	,	106	,	107	,	108	,	109	,	110	,	111	,	112	,	113	,	114	,	115	,	116	,	117	,	118	,	119	,	120	,	121	,	122	,	63	,	95	}};
 
 };
 #endif
