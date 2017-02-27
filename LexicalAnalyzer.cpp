@@ -25,6 +25,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
     debug.open("TeamY.dbg", std::ios_base::out);
 
     std::getline(input, line);
+    line += ' ';
 
     listing<<"Input file: "<<filename<<endl;
     debug<<"Input file: "<<filename<<endl;
