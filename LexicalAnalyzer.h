@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
@@ -64,6 +65,8 @@ class LexicalAnalyzer
 	int errors;
 	string allErrors;
 	bool eofFlag;
+
+	std::map<token_type, std::string> tokenMap;
 
 	bool isFinal(token_type);
 	int ConvertCharToTableCol(char);
