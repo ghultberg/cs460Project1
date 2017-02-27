@@ -7,12 +7,32 @@ using namespace std;
 
 LexicalAnalyzer::LexicalAnalyzer(char* filename)
 {
+
   // This function will initialize the lexical analyzer class
-  linenum = 1;
-  pos = 0;
-  errors = 0;
-  allErrors = "";
-  eofFlag = false;
+    linenum = 1;
+    pos = 0;
+    errors = 0;
+    allErrors = "";
+    eofFlag = false;
+
+    input.open(filename);
+
+    if (input.fail()) {
+        std::cerr << "Failed to open file '" << filename << "'" << std::endl;
+        exit(1);
+    }
+
+    listing.open("TeamY.lst", std::ios_base::out);
+    debug.open("TeamY.dbg", std::ios_base::out);
+    p1.open("P1-1.p1", std::ios_base::out);
+
+    std::getline(input, line);
+    line += ' ';
+
+    listing<<"Input file: "<<filename<<endl;
+    debug<<"Input file: "<<filename<<endl;
+    listing <<linenum<<": "<<line<<endl;
+    debug<<linenum<<": "<<line<<endl;
     
 
   input.open(filename);
@@ -43,6 +63,7 @@ LexicalAnalyzer::~LexicalAnalyzer()
   listing.close();
   debug.close();
   input.close();
+  p1.close();
 }
 
 token_type LexicalAnalyzer::GetToken()
@@ -61,98 +82,101 @@ token_type LexicalAnalyzer::GetToken()
 
     // If reading a lexeme and encountering EOF, return whatever the most recent state is
     while (!eofFlag) {
-      
-      // Return the current state when reaching the end of the line,
-      // and prepare the next line when GetToken() is called.
-      if (pos >= line.length()) {
-	
-	// If there's a new line available, reset the position
-	if (std::getline(input, line)) {
-	  line += ' ';
-	  pos = 0;
-	  linenum++;
-	  debug <<linenum<<": "<<line<<endl;
-	  listing<<linenum<<": "<<line<<endl;
-	}
-	
-	// Otherwise, we must have reached the end of the file
-	else {
-	  eofFlag = true;
-	  
-	  // If we reached the end of the file and we're still at START_T, then there
-	  // was trailing whitespace so we can simply return EOF_T
-	  if (token == START_T) return EOF_T;
-	} 
-	
-	// Exit the while loop and return whatever we have for token up to this point
-	break;
-      }
-      
-      // Shortcut to the current character to be evaluated
-      c = line[pos];
-      
-      // Handle whitespace: if we're still at the starting state, then we can simply
-      // loop through the whitespace until reaching a character.
-      if (isspace(c) && token == START_T) {
-	pos++;
-	continue;
-      }
-      
-      // Increment the position before beginning the next loop
-      pos++;
-      
-      // Append the current character to the lexeme
-      lexeme += c;
-      
-      // Cache the previous state in case we need to go back to it (i.e. GT_T vs GTE_T)
-      token_type prevState = token;
-      
-      // Run the character through the DFA and get the state that we end up in
-      token = LexicalAnalyzer::nextState(c, prevState);
-      
-      // If we reach an ERR_T but the previous state was final, we can return the
-      // previous state.
-      if (token == ERR_T) {
-	//Write an error report with ReportError
-	string err = "Invald character found: "; err+=c;
-	ReportError(err);
-	// If the state is final, return the previous state (otherwise, do nothing
-	// and return the ERR_T)
-	if (LexicalAnalyzer::isFinal(prevState)) {
-	  
-	  // Step the position counter backwards because this character we read
-	  // is part of the next lexeme
-	  pos--;
-	  
-	  // Remove the character we appended to the lexeme for the same reason
-	  // as above
-	  lexeme.pop_back();
-	  
-	  // Set the token to the previous state which was actually the end of
-	  // the state
-	  token = prevState;
-	} else if (prevState == 1 || prevState == 7 || prevState == 8 || prevState == 9) {
-	  pos--;
-	  lexeme.pop_back();
-	  
-	  // Hack to simulate a space after characters with intermediate-final
-	  // states when reaching ERR_T. This is needed because of the way the
-	  // table is designed: we can't always assume states like PLUS_T will
-	  // always have either a number or a space after them, so if an error
-	  // is encountered while in state 1, for example, we need to check if
-	  // it was possibly a final state and treat it as if a space followed.
-	  token = static_cast<token_type>(lexicalTable[prevState][0]);
-	}
-	
-	// Exit the while loop and return the token
-	break;
-      }
+        // Return the current state when reaching the end of the line,
+        // and prepare the next line when GetToken() is called.
+        if (pos >= line.length()) {
+
+        	// If there's a new line available, reset the position
+            if (std::getline(input, line)) {
+            	line += ' ';
+            	pos = 0;
+        		linenum++;
+        		debug <<linenum<<": "<<line<<endl;
+        		listing<<linenum<<": "<<line<<endl;
+            }
+
+            // Otherwise, we must have reached the end of the file
+            else {
+            	eofFlag = true;
+
+            	// If we reached the end of the file and we're still at START_T, then there
+            	// was trailing whitespace so we can simply return EOF_T
+            	if (token == START_T) return EOF_T;
+            } 
+
+            // Exit the while loop and return whatever we have for token up to this point
+            if (token != START_T) break;
+        }
+
+        // Shortcut to the current character to be evaluated
+        c = line[pos];
+
+        // Handle whitespace: if we're still at the starting state, then we can simply
+        // loop through the whitespace until reaching a character.
+        if (isspace(c) && token == START_T) {
+    		pos++;
+    		continue;
+        }
+
+        // Increment the position before beginning the next loop
+        pos++;
+
+        // Append the current character to the lexeme
+        lexeme += c;
+
+        // Cache the previous state in case we need to go back to it (i.e. GT_T vs GTE_T)
+        token_type prevState = token;
+
+        // Run the character through the DFA and get the state that we end up in
+        token = LexicalAnalyzer::nextState(c, prevState);
+
+        // If we reach an ERR_T but the previous state was final, we can return the
+        // previous state.
+        if (token == ERR_T) {
+
+            // std::cout << "previous token was: " << int(line[pos - 1]) << std::endl;
+            // std::cout << "current token is: " << int(c) << std::endl;
+
+        	// If the state is final, return the previous state (otherwise, do nothing
+        	// and return the ERR_T)
+        	if (LexicalAnalyzer::isFinal(prevState)) {
+        		
+        		// Step the position counter backwards because this character we read
+        		// is part of the next lexeme
+        		pos--;
+
+        		// Remove the character we appended to the lexeme for the same reason
+        		// as above
+        		lexeme.pop_back();
+
+        		// Set the token to the previous state which was actually the end of
+        		// the state
+	            token = prevState;
+        	} else if (prevState == 1 || prevState == 7 || prevState == 8 || prevState == 9) {
+                pos--;
+                lexeme.pop_back();
+
+                // Hack to simulate a space after characters with intermediate-final
+                // states when reaching ERR_T. This is needed because of the way the
+                // table is designed: we can't always assume states like PLUS_T will
+                // always have either a number or a space after them, so if an error
+                // is encountered while in state 1, for example, we need to check if
+                // it was possibly a final state and treat it as if a space followed.
+                token = static_cast<token_type>(lexicalTable[prevState][0]);
+            }
+
+        	// Exit the while loop and return the token
+            break;
+        }
     }
     
     std::cout << "Lexeme is: " << lexeme << std::endl;
     std::cout << "Token is: " << token << std::endl;
     debug<<"\t"<<lexeme<<"\t"<<token<<endl;
-    
+
+    p1 << token << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
+
+
     return token;
 }
 
@@ -183,19 +207,19 @@ void LexicalAnalyzer::ReportError(const string& msg)
 
 int LexicalAnalyzer::ConvertCharToTableCol(char c)
 {
-  int cintval;
-  
-  if (c >= 65 && c <= 90)
-    cintval = c + 32;
-  else if (isdigit(c))
-    cintval = 50; // all digits are represented on the table as the same value
-  // of 50, since all digits behave the same way lexically
-  else
-    cintval = (int)c;
-  
-  // std::cout << "Reading char " << cintval << std::endl;
-  
-  for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
+
+    int cintval;
+
+    if (c >= 65 && c <= 90)
+        cintval = c + 32;
+    else if (isdigit(c))
+        cintval = 50; // all digits are represented on the table as the same value
+    // of 50, since all digits behave the same way lexically
+    else
+        cintval = (int)c;
+
+    for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
+
     {
       if (cintval == lexicalTable[62][i])
 	return i;
@@ -207,16 +231,15 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
 
 token_type LexicalAnalyzer::nextState(char c, token_type currState)
 {
-  int col = ConvertCharToTableCol(c);
-  
-  // If the state we've reached is outside of the bounds of our table,
-  // return an ERR_T. This signals to GetToken() to check if the state
-  // it was previously in was final or not.
-  if (currState > 61) return ERR_T;
-  
-  // std::cout << "Reading table row " << currState << " col " << col << std::endl;
-  
-  return static_cast<token_type>(lexicalTable[currState][col]);
+
+	int col = ConvertCharToTableCol(c);
+
+	// If the state we've reached is outside of the bounds of our table,
+	// return an ERR_T. This signals to GetToken() to check if the state
+	// it was previously in was final or not.
+	if (currState > 61) return ERR_T;
+
+    return static_cast<token_type>(lexicalTable[currState][col]);
 }
 
 bool LexicalAnalyzer::isFinal(token_type s)

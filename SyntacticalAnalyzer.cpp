@@ -7,8 +7,10 @@ using namespace std;
 
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
+
   //creates the LexicalAnalyzer
   lex = new LexicalAnalyzer (filename);
+
 }
 
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
