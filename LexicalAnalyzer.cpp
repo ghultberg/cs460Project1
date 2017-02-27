@@ -19,6 +19,8 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
         std::cerr << "Failed to open file '" << filename << "'" << std::endl;
         exit(1);
     }
+
+    std::getline(input, line);
 }
 
 LexicalAnalyzer::~LexicalAnalyzer()
@@ -43,8 +45,6 @@ token_type LexicalAnalyzer::GetToken()
 
     token = START_T;
 
-    std::getline(input, line);
-
     char c;
 
     // If reading a lexeme and encountering EOF, return whatever the most recent state is
@@ -58,9 +58,11 @@ token_type LexicalAnalyzer::GetToken()
         // The current character being read
         c = line[pos];
 
+        // Increment the position before beginning the next loop
+        pos++;
+
         // Break from the loop when encountering whitespace of any kind or EOF flag is set
-        if (isspace(c)) {
-            pos++;
+        if (isspace(c) || c == 0) {
             break;
         }
 
@@ -77,20 +79,29 @@ token_type LexicalAnalyzer::GetToken()
         std::cout << "DFA returned: " << token << std::endl;
 
         // If in a final state when the next token is ERR_T, return the previous token
-        if (token == ERR_T && (token >= 100 || token <= 199)) {
-            pos--;
-            token = prevState;
+        if (token == ERR_T) {
+        	if (LexicalAnalyzer::isFinal(prevState)) {
+        		std::cout << "Need to use prevstate" << std::endl;
+        		pos--;
+        		lexeme.pop_back();
+	            token = prevState;
+        	}
             break;
         }
-
-        // Increment the position before beginning the next loop
-        pos++;
     }
 
-    std::cout << "Lexeme is: " << lexeme << std::endl;
-    std::cout << "Token is: " << token << std::endl;
+    // If there was a space at the end of the file
+    if (token != 0) {
+    	std::cout << "Lexeme is: " << lexeme << std::endl;
+	    std::cout << "Token is: " << token << std::endl;
 
-    return token;
+	    return token;
+    } else {
+    	std::cout << "Found end of file." << std::endl;
+    	return EOF_T;
+    }
+
+    
 }
 
 string LexicalAnalyzer::GetTokenName(token_type t) const
@@ -117,16 +128,19 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
 {
     int cintval;
 
-    if (c >= 97 || c <= 122)
-        cintval = c - 32;
+    if (c >= 65 && c <= 90)
+        cintval = c + 32;
     else if (isdigit(c))
         cintval = 50; // all digits are represented on the table as the same value
     // of 50, since all digits behave the same way lexically
     else
         cintval = (int)c;
-    for (int i = 0; i < 41; i++) // 61 is the last row of the table, it stores ascii equivalents of the values
+
+    // std::cout << "Reading char " << cintval << std::endl;
+
+    for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
     {
-        if (cintval == lexicalTable[61][i])
+        if (cintval == lexicalTable[62][i])
             return i;
     }
     string err = "Error: unexpected character ";
@@ -138,5 +152,15 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
 token_type LexicalAnalyzer::nextState(char c, token_type currState)
 {
 	int col = ConvertCharToTableCol(c);
+
+	if (currState >= 100) return ERR_T;
+
+	std::cout << "Reading table row " << currState << " col " << col << std::endl;
+
     return static_cast<token_type>(lexicalTable[currState][col]);
+}
+
+bool LexicalAnalyzer::isFinal(token_type s)
+{
+	return (s > 61);
 }
