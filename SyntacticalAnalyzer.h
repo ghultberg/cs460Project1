@@ -15,7 +15,7 @@ class SyntacticalAnalyzer
     private:
 	LexicalAnalyzer * lex;
 	token_type token;
-  std::ofstream debug;
+	
 };
 	
 #endif

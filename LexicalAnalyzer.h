@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//Ending states for the DFA, named after their associated tokens
 enum token_type {
 	ERR_T 		=  -1,
 	START_T   =   0,
@@ -68,6 +69,22 @@ class LexicalAnalyzer
 
 	token_type nextState(char, token_type);
 
+	/*a 2D array representing the DFA that the lexical analyzer uses to convert strings
+	  into tokens. Any state that is not an enumerated type is an intermediate state,
+	  meaning that the lexical analyzer expects more characters to follow it.
+	  Rows represent states of the DFA, with 0 being the initial state.
+	  Columns represent the input character to the DFA.
+
+	  IMPORTANT NOTE:
+	  Row 62 (the last row) is not part of the DFA. Rather, it contains ASCII
+	  equivalents of the character that column represents.
+	  EX: the first column of the table represents the SPACE key, so
+	  lexicalTable[62][0] = 32, since 32 is the ASCII value of the SPACE.
+	  
+	  This format allows us to easily convert characters into columns on the table without
+	  having to use extra memory and/or empty columns to represent the column number as 
+	  ASCII.
+	 */
 	int lexicalTable[63][41] = {{	ERR_T	,	QUOTE_T	,	LPAREN_T	,	RPAREN_T	,	MULT_T	,	1	,	9	,	2	,	DIV_T	,	3	,	7	,	EQUALTO_T	,	8	,	11	,	10	,	47	,	13	,	10	,	10	,	10	,	10	,	18	,	10	,	10	,	19	,	10	,	23	,	32	,	10	,	10	,	10	,	33	,	10	,	10	,	10	,	39	,	10	,	10	,	43	,	ERR_T	,	10	},
 {	PLUS_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	2	,	ERR_T	,	3	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},
 {	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	5	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	,	ERR_T	},

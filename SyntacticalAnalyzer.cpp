@@ -7,19 +7,11 @@ using namespace std;
 
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
-	lex = new LexicalAnalyzer (filename);
-	token_type t;
-
-	
-
-	while ((t = lex->GetToken()) != EOF_T)
-	{
-	  //removed all writes to debug, those are done in LexicalAnalyzer
-	}
+  //creates the LexicalAnalyzer
+  lex = new LexicalAnalyzer (filename);
 }
 
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
-{
-	
-	delete lex;
+{	
+  delete lex;
 }
