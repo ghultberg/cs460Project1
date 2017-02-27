@@ -239,7 +239,7 @@ int LexicalAnalyzer::ConvertCharToTableCol(char c)
 
     for (int i = 0; i < 41; i++) // 62 is the last row of the table, it stores ascii equivalents of the values
     {
-        if (cintval == lexicalTable[62][i])
+        if (cintval == lexicalTable[68][i])
             return i;
     }
     //string err = "Invald character found: "; err+=c;
