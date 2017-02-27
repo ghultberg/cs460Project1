@@ -74,6 +74,9 @@ token_type LexicalAnalyzer::GetToken()
             if (std::getline(input, line)) {
             	line += ' ';
             	pos = 0;
+		linenum++;
+		debug <<linenum<<": "<<line<<endl;
+		listing<<linenum<<": "<<line<<endl;
             }
 
             // Otherwise, we must have reached the end of the file
@@ -118,7 +121,8 @@ token_type LexicalAnalyzer::GetToken()
         // If we reach an ERR_T but the previous state was final, we can return the
         // previous state.
         if (token == ERR_T) {
-
+	  //Write an error report with ReportError
+	  
         	// If the state is final, return the previous state (otherwise, do nothing
         	// and return the ERR_T)
         	if (LexicalAnalyzer::isFinal(prevState)) {
@@ -143,6 +147,7 @@ token_type LexicalAnalyzer::GetToken()
 
     std::cout << "Lexeme is: " << lexeme << std::endl;
     std::cout << "Token is: " << token << std::endl;
+    debug<<"\t"<<lexeme<<"\t"<<token<<endl;
 
     return token;
 }
