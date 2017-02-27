@@ -188,6 +188,12 @@ token_type LexicalAnalyzer::GetToken()
         }
     }
 
+    if (token == ERR_T) {
+        //Write an error report with ReportError
+        std::string err = "Invalid character found: "; err+=c;
+        ReportError(err);
+    }
+      
     debug<<"\t"<<lexeme<<"\t"<<LexicalAnalyzer::GetTokenName(token)<<endl;
     p1 << LexicalAnalyzer::GetTokenName(token) << ' ' << LexicalAnalyzer::GetLexeme() << std::endl;
 
