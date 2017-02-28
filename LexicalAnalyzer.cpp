@@ -23,7 +23,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
 
     listing.open("TeamY.lst", std::ios_base::out);
     debug.open("TeamY.dbg", std::ios_base::out);
-    p1.open("TeamY.p1", std::ios_base::out);
+    p1.open(GetFilename(filename)+".p1", std::ios_base::out);
 
     std::getline(input, line);
     line += ' ';
@@ -261,4 +261,19 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 bool LexicalAnalyzer::isFinal(token_type s)
 {
 	return (s > 66);
+}
+
+
+string LexicalAnalyzer::GetFilename(const char *filename)
+{
+  string fName(filename);
+  size_t pos = fName.rfind(".");
+  
+  if(pos == string::npos)
+    return fName;
+
+  if(pos == 0)
+    return fName;
+
+  return fName.substr(0, pos);
 }

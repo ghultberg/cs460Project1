@@ -64,7 +64,7 @@ class LexicalAnalyzer
 	int errors;
 	string allErrors;
 	bool eofFlag;
-
+	string GetFilename(const char *);
 	std::map<token_type, std::string> tokenMap;
 
 	bool isFinal(token_type);
