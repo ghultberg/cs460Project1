@@ -167,21 +167,11 @@ token_type LexicalAnalyzer::GetToken()
         		// as above
         		lexeme.pop_back();
 
-        		// Set the token to the previous state which was actually the end of
-        		// the state
-	            token = prevState;
-        	} else if (prevState == 1 || (prevState >= 3 && prevState <= 5) || (prevState >= 7 && prevState <= 9 ) || prevState >= 54) {
-                pos--;
-                lexeme.pop_back();
-
-                // Hack to simulate a space after characters with intermediate-final
-                // states when reaching ERR_T. This is needed because of the way the
-                // table is designed: we can't always assume states like PLUS_T will
-                // always have either a number or a space after them, so if an error
-                // is encountered while in state 1, for example, we need to check if
-                // it was possibly a final state and treat it as if a space followed.
-                token = static_cast<token_type>(lexicalTable[prevState][0]);
-            }
+                if (prevState > 66)
+                    token = prevState;
+                else
+                    token = static_cast<token_type>(lexicalTable[prevState][0]);	            
+        	}
 
         	// Exit the while loop and return the token
             break;
@@ -259,8 +249,11 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 }
 
 bool LexicalAnalyzer::isFinal(token_type s)
-{
-	return (s > 66);
+{   
+    if (s > 66) return true;
+
+    token_type withSpace = static_cast<token_type>(lexicalTable[s][0]);
+	return (withSpace > 66 && !(s == START_T || withSpace == START_T));
 }
 
 
