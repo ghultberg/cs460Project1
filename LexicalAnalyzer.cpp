@@ -34,7 +34,7 @@ LexicalAnalyzer::LexicalAnalyzer(char* filename)
     debug<<linenum<<": "<<line<<endl;
 
     tokenMap = {
-        {ERR_T,"ERR_T"},
+        {ERR_T,"ERROR_T"},
         {START_T,"START_T"},
         {QUOTE_T,"QUOTE_T"},
         {LPAREN_T,"LPAREN_T"},
