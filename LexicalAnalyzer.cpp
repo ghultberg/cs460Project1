@@ -152,9 +152,6 @@ token_type LexicalAnalyzer::GetToken()
         // previous state.
         if (token == ERR_T) {
 
-            // std::cout << "previous token was: " << int(line[pos - 1]) << std::endl;
-            // std::cout << "current token is: " << int(c) << std::endl;
-
         	// If the state is final, return the previous state (otherwise, do nothing
         	// and return the ERR_T)
         	if (LexicalAnalyzer::isFinal(prevState)) {
@@ -243,7 +240,7 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 	// If the state we've reached is outside of the bounds of our table,
 	// return an ERR_T. This signals to GetToken() to check if the state
 	// it was previously in was final or not.
-	if (currState > 99) return ERR_T;
+	if (currState > 99 || col == ERR_T) return ERR_T;
 
     return static_cast<token_type>(lexicalTable[currState][col]);
 }
