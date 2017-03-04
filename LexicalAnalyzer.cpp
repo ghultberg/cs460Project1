@@ -170,7 +170,7 @@ token_type LexicalAnalyzer::GetToken()
         		// Set the token to the previous state which was actually the end of
         		// the state
 	            token = prevState;
-        	} else if (prevState == 1 || prevState == 7 || prevState == 8 || prevState == 9 || prevState >= 54) {
+        	} else if (prevState == 1 || (prevState >= 3 && prevState <= 5) || (prevState >= 7 && prevState <= 9 ) || prevState >= 54) {
                 pos--;
                 lexeme.pop_back();
 
