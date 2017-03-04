@@ -247,7 +247,7 @@ token_type LexicalAnalyzer::nextState(char c, token_type currState)
 
 bool LexicalAnalyzer::isFinal(token_type s)
 {   
-    if (s > 66) return true;
+    if (s > 66 || s == 2) return true;
 
     token_type withSpace = static_cast<token_type>(lexicalTable[s][0]);
 	return (withSpace > 66 && !(s == START_T || withSpace == START_T));
